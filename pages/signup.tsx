@@ -1,4 +1,3 @@
-// frontend/pages/signup.tsx
 import React, { useState } from 'react';
 
 const SignupPage: React.FC = () => {
@@ -14,10 +13,34 @@ const SignupPage: React.FC = () => {
     setPassword(e.target.value);
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // Add signup logic here
-    console.log('Signup form submitted');
+    // Basic form validation
+    if (!email || !password) {
+      setError('Please enter both email and password.');
+      return;
+    }
+    try {
+      // Make a POST request to the backend API endpoint for signup
+      const response = await fetch('http://localhost:3001/api/signup', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, password }),
+      });
+      if (response.ok) {
+        console.log('Signup successful');
+        // Optionally, redirect the user to another page upon successful signup
+        // router.push('/dashboard');
+      } else {
+        const data = await response.json();
+        setError(data.message || 'Signup failed. Please try again.');
+      }
+    } catch (error:any) {
+      console.error('Signup failed:', error.message);
+      setError('Signup failed. Please try again.');
+    }
   };
 
   return (
