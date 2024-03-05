@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 
+
+import '../styles/global.css';
+
 const Login: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -21,18 +24,13 @@ const Login: React.FC = () => {
       setError('Please enter both email and password.');
       return;
     }
-    // Add your login logic here (making an API request)
     try {
-      const response = await axios.post('/api/login', { email, password });
-      // If login successful, redirect or handle accordingly
+      const response = await axios.post('http://localhost:3000/api/auth/login', { email, password });
       console.log('Login successful');
     } catch (error :any) {
-      // If login failed, handle error
       if (error.response) {
-        // Server responded with error status code (e.g., 401 Unauthorized)
         setError(error.response.data.message || 'Login failed. Please try again.');
       } else {
-        // Other errors (e.g., network error)
         console.error('Login failed:', error.message);
         setError('Login failed. Please try again.');
       }
@@ -56,8 +54,7 @@ const Login: React.FC = () => {
         </div>
         <div>
           <label htmlFor="password">Password:</label>
-          <input
-            type="password"
+          <input  type="password"
             id="password"
             value={password}
             onChange={handlePasswordChange}
@@ -66,45 +63,6 @@ const Login: React.FC = () => {
         </div>
         <button type="submit">Login</button>
       </form>
-      <style jsx>{`
-        div {
-          max-width: 400px;
-          margin: 0 auto;
-          padding: 20px;
-          border: 1px solid #ccc;
-          border-radius: 5px;
-          background-color: #f9f9f9;
-        }
-        form {
-          display: flex;
-          flex-direction: column;
-        }
-        div > div {
-          margin-bottom: 10px;
-        }
-        label {
-          font-weight: bold;
-        }
-        input[type='email'],
-        input[type='password'] {
-          padding: 8px;
-          font-size: 16px;
-          border: 1px solid #ccc;
-          border-radius: 3px;
-        }
-        button {
-          padding: 10px 20px;
-          font-size: 16px;
-          background-color: #007bff;
-          color: #fff;
-          border: none;
-          border-radius: 3px;
-          cursor: pointer;
-        }
-        button:hover {
-          background-color: #0056b3;
-        }
-      `}</style>
     </div>
   );
 };

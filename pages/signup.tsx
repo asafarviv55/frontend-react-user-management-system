@@ -3,6 +3,9 @@ import React, { useState } from 'react';
 const SignupPage: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [username, setUserName] = useState('');
+  const [roleId, setRoleId] = useState('');
+
   const [error, setError] = useState('');
 
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -13,6 +16,16 @@ const SignupPage: React.FC = () => {
     setPassword(e.target.value);
   };
 
+  const handleUserNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setUserName(e.target.value);
+  };
+
+  const handleUserRoleId = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setRoleId(e.target.value);
+  };
+
+
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     // Basic form validation
@@ -22,12 +35,12 @@ const SignupPage: React.FC = () => {
     }
     try {
       // Make a POST request to the backend API endpoint for signup
-      const response = await fetch('http://localhost:3001/api/signup', {
+      const response = await fetch('http://localhost:3001/api/auth/signup', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({username, email, password , roleId  }),
       });
       if (response.ok) {
         console.log('Signup successful');
@@ -48,26 +61,16 @@ const SignupPage: React.FC = () => {
       <h1>Sign Up</h1>
       {error && <p style={{ color: 'red' }}>{error}</p>}
       <form onSubmit={handleSubmit}>
-        <div>
-          <label htmlFor="email">Email:</label>
-          <input
-            type="email"
-            id="email"
-            value={email}
-            onChange={handleEmailChange}
-            required
-          />
-        </div>
-        <div>
-          <label htmlFor="password">Password:</label>
-          <input
-            type="password"
-            id="password"
-            value={password}
-            onChange={handlePasswordChange}
-            required
-          />
-        </div>
+          <div>
+                <label htmlFor="username">UserName:</label>
+                <input type="text" id="username" value={username} onChange={handleUserNameChange} required/>
+                <label htmlFor="email">Email:</label>
+                <input type="email" id="email" value={email} onChange={handleEmailChange} required/>
+                <label htmlFor="password">Password:</label>
+                <input type="password" id="password" value={password} onChange={handlePasswordChange} required/>
+                <label htmlFor="password">Role ID:</label>
+                <input type="select" id="password" value={password} onChange={handlePasswordChange} required/>
+          </div>
         <button type="submit">Sign Up</button>
       </form>
       <style jsx>{`
